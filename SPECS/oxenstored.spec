@@ -4,7 +4,7 @@
 
 Name:           oxenstored
 Version: 26.0.0
-Release: 3%{?xsrel}%{?dist}
+Release: 3%{?xsrel}.1%{?dist}
 Summary:        oxenstored - OCaml Xenstore daemon
 License:        LGPL-2.1-only WITH OCaml-LGPL-linking-exception
 Source0: oxenstored-26.0.0.tar.gz
@@ -18,12 +18,16 @@ BuildRequires:  xs-opam-repo >= 6.77.0-1
 BuildRequires:  ocaml
 BuildRequires:  xen-devel
 BuildRequires:  xen-dom0-libs-devel
+%if ! 0%{?xcpng}
+# XCP-ng: this pulls too much stuff, and is not useful in the end
 # Locally, we use dune-built interface and plugin, but final builds
 # use the plugin provided by xen
 BuildRequires:  xen-dom0-tools
+%endif
 BuildRequires: xen-ocaml-libs
 
 Provides: oxenstored
+Requires: xen-dom0-tools
 Obsoletes: xen-oxenstored < 5.0
 
 %global ocaml_dir %{_opamroot}/ocaml-system
@@ -57,6 +61,9 @@ make test
 %exclude %{ocaml_libdir}/oxenstored/opam
 
 %changelog
+* Tue Aug 03 2026 Yann Dirson <yann.dirson@vates.tech> - 26.0.0-3.1
+- Move xen-dom0-tools from BuildRequires to Requires
+
 * Mon Apr 20 2026 Andrew Cooper <andrew.cooper3@citrix.com> - 26.0.0-3
 - Fix for XSA-483 CVE-2026-23556
 
