@@ -1,17 +1,17 @@
-%global package_speccommit ef2835274752f1f3340c51550ed6520db5671678
-%global package_srccommit v25.3.0
+%global package_speccommit ef3ed5a07ec6a214089c0fa9d1e89ba85afc8a9b
+%global package_srccommit v26.0.0
 # -*- rpm-spec -*-
 
 Name:           oxenstored
-Version: 25.3.0
-Release: 1%{?xsrel}%{?dist}
+Version: 26.0.0
+Release: 3%{?xsrel}%{?dist}
 Summary:        oxenstored - OCaml Xenstore daemon
 License:        LGPL-2.1-only WITH OCaml-LGPL-linking-exception
-Source0: oxenstored-25.3.0.tar.gz
-
+Source0: oxenstored-26.0.0.tar.gz
 
 Patch1: configure-build.patch
 Patch2: oxenstore-censor-sensitive-data.patch
+Patch3: xsa483-xapi.patch
 
 BuildRequires:  xs-opam-repo >= 6.77.0-1
 
@@ -57,6 +57,19 @@ make test
 %exclude %{ocaml_libdir}/oxenstored/opam
 
 %changelog
+* Mon Apr 20 2026 Andrew Cooper <andrew.cooper3@citrix.com> - 26.0.0-3
+- Fix for XSA-483 CVE-2026-23556
+
+* Mon Mar 30 2026 Christian Lindig <christian.lindig@citrix.com> - 26.0.0-2
+- meta: move comment to avoid ocamlformat from getting confused
+- meta: reformat
+- CP-311786 reformat *.ml files
+- CP-311786 reformat *.c files
+- CP-311786 xenmmap_stubs.c release OCaml global lock
+- CP-311786 xenmmap_stubs.c use size_t/Long_val
+- CP-311880 avoid naked pointer in eventchn_stubs.c
+- CP-311880 don't use perror
+
 * Fri Nov 07 2025 Steven Woods <steven.woods@citrix.com> - 25.3.0-1
 - Fix path handling when loading the plugins
 
