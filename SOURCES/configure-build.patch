@@ -1,0 +1,14 @@
+diff --git a/oxenstored/configure.ml b/oxenstored/configure.ml
+index 0b56e90..fb03003 100644
+--- a/oxenstored/configure.ml
++++ b/oxenstored/configure.ml
+@@ -6,7 +6,7 @@ let xen_log_dir = ref "/var/log/xen/"
+
+ let xen_config_dir = ref "/etc/xen"
+
+-let libexec = ref "/usr/local/lib/xen"
++let libexec = ref "/usr/libexec/xen"
+
+ let args =
+   [
+
