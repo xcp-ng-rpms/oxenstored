@@ -43,26 +43,28 @@ OCaml Xenstore daemon
 make
 
 %install
-rm -rf ./xsd_glue ./tests # we are taking the plugin built by upstream xen.spec instead, otherwise there are issues.
-rm LICENSE README.md
 export OCAMLPATH=%{_libdir}/ocaml
 DESTDIR=%{buildroot} %{__make} install
-%{__install} -D -m 0755 _build/install/default/sbin/oxenstored %{buildroot}%{_sbindir}/oxenstored
+install -d -m0755 %{buildroot}%{_sbindir}
+mv %{buildroot}%{ocaml_dir}/sbin/oxenstored %{buildroot}%{_sbindir}/oxenstored
 
 %check
 make test
 
 %files
 %{_sbindir}/oxenstored
-%exclude %{ocaml_dir}/sbin/oxenstored
+# the plugin is built by xen, do not install a copy
 %exclude %{ocaml_libdir}/oxenstored/xsdglue/*
 %exclude %{ocaml_libdir}/oxenstored/META
 %exclude %{ocaml_libdir}/oxenstored/dune-package
 %exclude %{ocaml_libdir}/oxenstored/opam
+%exclude %{ocaml_dir}/doc/oxenstored/LICENSE
+%exclude %{ocaml_dir}/doc/oxenstored/README.md
 
 %changelog
-* Tue Aug 03 2026 Yann Dirson <yann.dirson@vates.tech> - 26.0.0-3.1
+* Thu Aug 13 2026 Yann Dirson <yann.dirson@vates.tech> - 26.0.0-3.1
 - Move xen-dom0-tools from BuildRequires to Requires
+- Clean up %%install rule
 
 * Mon Apr 20 2026 Andrew Cooper <andrew.cooper3@citrix.com> - 26.0.0-3
 - Fix for XSA-483 CVE-2026-23556
