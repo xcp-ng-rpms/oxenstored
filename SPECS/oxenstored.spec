@@ -38,6 +38,7 @@ OCaml Xenstore daemon
 
 %prep
 %autosetup -p1
+rm -rf ./xsd_glue # we are taking the plugin built by upstream xen.spec instead, otherwise there are issues.
 
 %build
 make
@@ -58,8 +59,6 @@ fi
 
 %files
 %{_sbindir}/oxenstored
-# the plugin is built by xen, do not install a copy
-%exclude %{ocaml_libdir}/oxenstored/xsdglue/*
 %exclude %{ocaml_libdir}/oxenstored/META
 %exclude %{ocaml_libdir}/oxenstored/dune-package
 %exclude %{ocaml_libdir}/oxenstored/opam
@@ -69,6 +68,9 @@ fi
 %changelog
 * Mon Sep 07 2026 Yann Dirson <yann.dirson@vates.tech> - 26.0.0-3.2
 - Ensure absence of DUNE_PLACEHOLDER in the build
+- Reinstate the part of "Clean up %%install rule" removing xsd_glue, but in
+  %%prep instead of %%install
+- Remove exclude rule of now-not-created `xsdglue` directory
 
 * Thu Aug 13 2026 Yann Dirson <yann.dirson@vates.tech> - 26.0.0-3.1
 - Move xen-dom0-tools from BuildRequires to Requires
