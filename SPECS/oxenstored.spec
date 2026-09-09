@@ -4,7 +4,7 @@
 
 Name:           oxenstored
 Version: 26.0.0
-Release: 3%{?xsrel}.2%{?dist}
+Release: 3%{?xsrel}.2~tee.1%{?dist}
 Summary:        oxenstored - OCaml Xenstore daemon
 License:        LGPL-2.1-only WITH OCaml-LGPL-linking-exception
 Source0: oxenstored-26.0.0.tar.gz
