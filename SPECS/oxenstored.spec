@@ -4,7 +4,7 @@
 
 Name:           oxenstored
 Version: 26.0.0
-Release: 3%{?xsrel}.1%{?dist}
+Release: 3%{?xsrel}.2%{?dist}
 Summary:        oxenstored - OCaml Xenstore daemon
 License:        LGPL-2.1-only WITH OCaml-LGPL-linking-exception
 Source0: oxenstored-26.0.0.tar.gz
@@ -38,6 +38,7 @@ OCaml Xenstore daemon
 
 %prep
 %autosetup -p1
+rm -rf ./xsd_glue # we are taking the plugin built by upstream xen.spec instead, otherwise there are issues.
 
 %build
 make
@@ -50,11 +51,14 @@ mv %{buildroot}%{ocaml_dir}/sbin/oxenstored %{buildroot}%{_sbindir}/oxenstored
 
 %check
 make test
+# sanity check
+if grep -q '%%DUNE_PLACEHOLDER:' %{buildroot}%{_sbindir}/oxenstored; then
+    echo >&2 "ERROR: DUNE_PLACEHOLDER found in binary"
+    exit 1
+fi
 
 %files
 %{_sbindir}/oxenstored
-# the plugin is built by xen, do not install a copy
-%exclude %{ocaml_libdir}/oxenstored/xsdglue/*
 %exclude %{ocaml_libdir}/oxenstored/META
 %exclude %{ocaml_libdir}/oxenstored/dune-package
 %exclude %{ocaml_libdir}/oxenstored/opam
@@ -62,6 +66,12 @@ make test
 %exclude %{ocaml_dir}/doc/oxenstored/README.md
 
 %changelog
+* Mon Sep 07 2026 Yann Dirson <yann.dirson@vates.tech> - 26.0.0-3.2
+- Ensure absence of DUNE_PLACEHOLDER in the build
+- Reinstate the part of "Clean up %%install rule" removing xsd_glue, but in
+  %%prep instead of %%install
+- Remove exclude rule of now-not-created `xsdglue` directory
+
 * Thu Aug 13 2026 Yann Dirson <yann.dirson@vates.tech> - 26.0.0-3.1
 - Move xen-dom0-tools from BuildRequires to Requires
 - Clean up %%install rule
